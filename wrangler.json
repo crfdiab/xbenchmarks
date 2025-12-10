@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "buildCommand": "hugo",
+  "buildCommandDir": "/",
+  "outputDirectory": "public"
+}
