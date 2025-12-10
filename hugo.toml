@@ -1,7 +1,6 @@
 baseURL = "https://xbenchmarks.local/"
 languageCode = "en-us"
 title = "XBenchmarks"
-theme = ""
 
 [params]
   description = "Compare laptops, CPUs, and GPUs with detailed benchmarks and specifications"
