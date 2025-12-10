@@ -1,0 +1,27 @@
+{{- $laptops := .Site.Data.laptops -}}
+{{- $cpus := .Site.Data.cpus -}}
+{{- $gpus := .Site.Data.gpus -}}
+
+{{- range $id, $laptop := $laptops -}}
+  {{- $brand := index ($laptop.name | split " ") 0 -}}
+  {{- $brand = replaceRE "[^a-z0-9-]+" "" (lower $brand) -}}
+  {{- $path := printf "laptop-brands/%s/%s" $brand $laptop.slug -}}
+  
+  {{- $content := dict 
+        "path" $path
+        "slug" $laptop.slug
+        "title" $laptop.name
+        "description" (printf "Detailed specs and benchmarks for %s" $laptop.name)
+        "kind" "page"
+        "layout" "laptop-single"
+  -}}
+  
+  {{- $params := dict
+        "laptop" $laptop
+        "cpus" $cpus
+        "gpus" $gpus
+  -}}
+  
+  {{- $content = merge $content (dict "params" $params) -}}
+  {{- $.AddPage $content -}}
+{{- end -}}

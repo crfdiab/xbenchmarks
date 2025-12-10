@@ -1,0 +1,63 @@
+{{ define "main" }}
+<div class="collection-page">
+  <h1>Browse CPUs</h1>
+  <p class="collection-description">Explore {{ len .Site.Data.cpus }} processors with detailed specifications and benchmarks.</p>
+  
+  <div class="filters">
+    <input type="text" id="search" placeholder="Search CPUs..." class="search-input">
+  </div>
+
+  <div class="collection-grid" id="cpu-grid">
+    {{ range $id, $cpu := .Site.Data.cpus }}
+      <div class="collection-card" data-name="{{ lower $cpu.name }}">
+        {{ if $cpu.image }}
+          <img src="{{ $cpu.image }}" alt="{{ $cpu.name }}" class="card-image">
+        {{ else }}
+          <div class="image-placeholder">CPU</div>
+        {{ end }}
+        <div class="card-content">
+          <h3>{{ $cpu.name }}</h3>
+          {{ with $cpu.benchmarks.general.metrics }}
+            {{ if .vendor }}
+              <p class="vendor">{{ .vendor }}</p>
+            {{ end }}
+          {{ end }}
+          {{ with $cpu.benchmarks.cpu.metrics }}
+            {{ if .total_cores }}
+              <p class="spec-line">Cores: {{ .total_cores }}</p>
+            {{ end }}
+            {{ if .base_frequency_p }}
+              <p class="spec-line">Base: {{ .base_frequency_p }}</p>
+            {{ end }}
+          {{ end }}
+          {{ $vendor := index ($cpu.name | split " ") 0 }}
+          {{ $vendor = replaceRE "[^a-z0-9-]+" "" (lower $vendor) }}
+          <a href="/cpus/cpu-vendors/{{ $vendor }}-cpus/{{ $cpu.slug }}/" class="btn">View Details</a>
+        </div>
+      </div>
+    {{ end }}
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('search');
+  const cards = document.querySelectorAll('.collection-card');
+
+  if (searchInput) {
+    searchInput.addEventListener('keyup', function() {
+      const searchTerm = this.value.toLowerCase();
+      
+      cards.forEach(card => {
+        const name = card.dataset.name;
+        if (name.includes(searchTerm)) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  }
+});
+</script>
+{{ end }}

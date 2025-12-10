@@ -1,0 +1,28 @@
+# Build files and directories
+/public/
+/resources/
+/dist/
+/build/
+/.hugo_build.lock
+
+# Dependencies
+/node_modules/
+/vendor/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment files
+.env
+.env.local
+
+# Temp files
+*.tmp
+*.log

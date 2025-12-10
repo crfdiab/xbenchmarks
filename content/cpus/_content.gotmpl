@@ -1,0 +1,23 @@
+{{- $cpus := .Site.Data.cpus -}}
+
+{{- range $id, $cpu := $cpus -}}
+  {{- $vendor := replaceRE "[^a-z0-9-]+" "" (lower (index ($cpu.name | split " ") 0)) -}}
+  {{- $path := printf "cpu-vendors/%s-cpus/%s" $vendor $cpu.slug -}}
+  
+  {{- $content := dict 
+        "path" $path
+        "slug" $cpu.slug
+        "title" $cpu.name
+        "description" (printf "Detailed specs and benchmarks for %s" $cpu.name)
+        "kind" "page"
+        "layout" "cpu-single"
+  -}}
+  
+  {{- $params := dict
+        "cpu" $cpu
+        "laptops" $.Site.Data.laptops
+  -}}
+  
+  {{- $content = merge $content (dict "params" $params) -}}
+  {{- $.AddPage $content -}}
+{{- end -}}

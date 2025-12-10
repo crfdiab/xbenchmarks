@@ -1,0 +1,34 @@
+baseURL = "https://xbenchmarks.local/"
+languageCode = "en-us"
+title = "XBenchmarks"
+theme = ""
+
+[params]
+  description = "Compare laptops, CPUs, and GPUs with detailed benchmarks and specifications"
+  author = "XBenchmarks"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  page = ["HTML"]
+
+[pagination]
+  pagerSize = 24
+
+[menu]
+  [[menu.main]]
+    name = "Laptops"
+    url = "/laptops/"
+    weight = 1
+  [[menu.main]]
+    name = "CPUs"
+    url = "/cpus/"
+    weight = 2
+  [[menu.main]]
+    name = "GPUs"
+    url = "/gpus/"
+    weight = 3

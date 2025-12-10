@@ -1,0 +1,56 @@
+{{ define "main" }}
+<div class="collection-page">
+  <h1>Browse Laptops</h1>
+  <p class="collection-description">Explore {{ len .Site.Data.laptops }} laptop models with detailed specifications and performance comparisons.</p>
+  
+  <div class="filters">
+    <input type="text" id="search" placeholder="Search laptops..." class="search-input">
+  </div>
+
+  <div class="collection-grid" id="laptop-grid">
+    {{ range $id, $laptop := .Site.Data.laptops }}
+      <div class="collection-card" data-name="{{ lower $laptop.name }}">
+        {{ if $laptop.image }}
+          <img src="{{ $laptop.image }}" alt="{{ $laptop.name }}" class="card-image">
+        {{ else }}
+          <div class="image-placeholder">No Image</div>
+        {{ end }}
+        <div class="card-content">
+          <h3>{{ $laptop.name }}</h3>
+          {{ if $laptop.base_price }}
+            <p class="price">${{ $laptop.base_price }}</p>
+          {{ end }}
+          {{ if $laptop.specs.display.size }}
+            <p class="spec-line">Display: {{ $laptop.specs.display.size }}</p>
+          {{ end }}
+          {{ $brand := index ($laptop.name | split " ") 0 }}
+          {{ $brand = replaceRE "[^a-z0-9-]+" "" (lower $brand) }}
+          <a href="/laptop-brands/{{ $brand }}/{{ $laptop.slug }}/" class="btn">View Details</a>
+        </div>
+      </div>
+    {{ end }}
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('search');
+  const cards = document.querySelectorAll('.collection-card');
+
+  if (searchInput) {
+    searchInput.addEventListener('keyup', function() {
+      const searchTerm = this.value.toLowerCase();
+      
+      cards.forEach(card => {
+        const name = card.dataset.name;
+        if (name.includes(searchTerm)) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  }
+});
+</script>
+{{ end }}

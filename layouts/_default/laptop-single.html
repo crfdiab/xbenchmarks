@@ -1,0 +1,158 @@
+{{ define "main" }}
+<article class="laptop-profile">
+  <div class="laptop-header">
+    <div class="laptop-image">
+      {{ if .Params.laptop.image }}
+        <img src="{{ .Params.laptop.image }}" alt="{{ .Params.laptop.name }}">
+      {{ else }}
+        <div class="image-placeholder">No Image</div>
+      {{ end }}
+    </div>
+    <div class="laptop-info">
+      <h1>{{ .Params.laptop.name }} Laptop Specs & Performance Review</h1>
+      {{ if .Params.laptop.base_price }}
+        <p class="price">Starting at: <strong>${{ .Params.laptop.base_price }}</strong></p>
+      {{ end }}
+      {{ if .Params.laptop.specs.general.battery }}
+        <p class="battery">Battery: {{ .Params.laptop.specs.general.battery }}</p>
+      {{ end }}
+
+      {{ if .Params.laptop.laptop_meta_description }}
+        <p class="description">{{ .Params.laptop.laptop_meta_description }}</p>
+      {{ end }}
+    </div>
+  </div>
+
+  <section class="specs-section">
+    <h2>Specifications</h2>
+    <div class="specs-grid">
+      {{ if .Params.laptop.configurations.cpus }}
+      <div class="spec-card">
+        <h3>Processor</h3>
+        <div class="config-group">
+          {{ range .Params.laptop.configurations.cpus }}
+            {{ $cpuId := .id }}
+            {{ $cpu := index $.Params.cpus $cpuId }}
+            {{ if $cpu }}
+              <div class="config-item">
+                <a href="{{ $cpu.slug }}" class="spec-link">{{ .name }}</a>
+              </div>
+            {{ end }}
+          {{ end }}
+        </div>
+      </div>
+      {{ end }}
+
+      {{ if .Params.laptop.configurations.gpus }}
+      <div class="spec-card">
+        <h3>Graphics</h3>
+        <div class="config-group">
+          {{ range .Params.laptop.configurations.gpus }}
+            {{ $gpuId := .id }}
+            {{ $gpu := index $.Params.gpus $gpuId }}
+            {{ if $gpu }}
+              <div class="config-item">
+                <a href="{{ $gpu.slug }}" class="spec-link">{{ .name }}</a>
+              </div>
+            {{ end }}
+          {{ end }}
+        </div>
+      </div>
+      {{ end }}
+
+      {{ if .Params.laptop.specs.display.size }}
+      <div class="spec-card">
+        <h3>Display</h3>
+        <ul>
+          <li>Size: {{ .Params.laptop.specs.display.size }}</li>
+          <li>Resolution: {{ .Params.laptop.specs.display.resolution }}</li>
+          <li>Refresh Rate: {{ .Params.laptop.specs.display.refresh_rate }}</li>
+          {{ if .Params.laptop.specs.display.type }}<li>Type: {{ .Params.laptop.specs.display.type }}</li>{{ end }}
+        </ul>
+      </div>
+      {{ end }}
+
+      {{ if .Params.laptop.specs.case.weight }}
+      <div class="spec-card">
+        <h3>Physical</h3>
+        <ul>
+          <li>Weight: {{ .Params.laptop.specs.case.weight }}</li>
+          <li>Material: {{ .Params.laptop.specs.case.material }}</li>
+          {{ if .Params.laptop.specs.case.colors }}<li>Colors: {{ .Params.laptop.specs.case.colors }}</li>{{ end }}
+        </ul>
+      </div>
+      {{ end }}
+
+      {{ if or .Params.laptop.configurations.ram .Params.laptop.configurations.storage }}
+      <div class="spec-card">
+        <h3>Configuration Options</h3>
+        <ul>
+          {{ if .Params.laptop.configurations.ram }}
+          <li>RAM: {{ delimit .Params.laptop.configurations.ram ", " }}</li>
+          {{ end }}
+          {{ if .Params.laptop.configurations.storage }}
+          <li>Storage: {{ delimit .Params.laptop.configurations.storage ", " }}</li>
+          {{ end }}
+        </ul>
+      </div>
+      {{ end }}
+    </div>
+  </section>
+
+  <section class="configurator-section">
+    <h2>Performance Calculator</h2>
+    <form class="configurator-form" id="laptop-configurator" data-laptop-id="{{ .Params.laptop.id }}">
+      <div class="form-group">
+        <label for="cpu-select">Select CPU:</label>
+        <select id="cpu-select" name="cpu">
+          {{ range .Params.laptop.configurations.cpus }}
+            <option value="{{ .id }}">{{ .name }}</option>
+          {{ end }}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="gpu-select">Select GPU:</label>
+        <select id="gpu-select" name="gpu">
+          {{ range .Params.laptop.configurations.gpus }}
+            <option value="{{ .id }}">{{ .name }}</option>
+          {{ end }}
+        </select>
+      </div>
+
+      <div class="scores-display">
+        <h3>Estimated Performance Scores</h3>
+        <div class="score-grid">
+          <div class="score-item">
+            <span class="score-label">CPU Performance</span>
+            <div class="score-bar">
+              <div class="score-fill" id="perf-fill" style="width: 50%"></div>
+            </div>
+            <span class="score-value" id="perf-score">50</span>
+          </div>
+          <div class="score-item">
+            <span class="score-label">Gaming</span>
+            <div class="score-bar">
+              <div class="score-fill" id="game-fill" style="width: 50%"></div>
+            </div>
+            <span class="score-value" id="game-score">50</span>
+          </div>
+          <div class="score-item">
+            <span class="score-label">Battery Life</span>
+            <div class="score-bar">
+              <div class="score-fill" id="batt-fill" style="width: 50%"></div>
+            </div>
+            <span class="score-value" id="batt-score">50</span>
+          </div>
+        </div>
+      </div>
+    </form>
+  </section>
+</article>
+
+<script>
+  window.laptopData = {{ .Params.laptop | jsonify | safeJS }};
+  window.cpusData = {{ .Params.cpus | jsonify | safeJS }};
+  window.gpusData = {{ .Params.gpus | jsonify | safeJS }};
+</script>
+{{ end }}

@@ -1,0 +1,65 @@
+{{ define "main" }}
+<div class="collection-page">
+  <h1>Browse GPUs</h1>
+  <p class="collection-description">Explore {{ len .Site.Data.gpus }} graphics cards with detailed specifications and gaming performance.</p>
+  
+  <div class="filters">
+    <input type="text" id="search" placeholder="Search GPUs..." class="search-input">
+  </div>
+
+  <div class="collection-grid" id="gpu-grid">
+    {{ range $id, $gpu := .Site.Data.gpus }}
+      <div class="collection-card" data-name="{{ lower $gpu.name }}">
+        {{ if $gpu.image }}
+          <img src="{{ $gpu.image }}" alt="{{ $gpu.name }}" class="card-image">
+        {{ else }}
+          <div class="image-placeholder">GPU</div>
+        {{ end }}
+        <div class="card-content">
+          <h3>{{ $gpu.name }}</h3>
+          {{ with $gpu.specs.general }}
+            {{ if .vendor }}
+              <p class="vendor">{{ .vendor }}</p>
+            {{ end }}
+          {{ end }}
+          {{ with $gpu.specs.physical }}
+            {{ if .tgp }}
+              <p class="spec-line">TGP: {{ .tgp }}</p>
+            {{ end }}
+          {{ end }}
+          {{ with $gpu.specs.memory }}
+            {{ if .memory_size }}
+              <p class="spec-line">Memory: {{ .memory_size }}</p>
+            {{ end }}
+          {{ end }}
+          {{ $vendor := index ($gpu.name | split " ") 0 }}
+          {{ $vendor = replaceRE "[^a-z0-9-]+" "" (lower $vendor) }}
+          <a href="/gpus/gpu-vendors/{{ $vendor }}-gpus/{{ $gpu.slug }}/" class="btn">View Details</a>
+        </div>
+      </div>
+    {{ end }}
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('search');
+  const cards = document.querySelectorAll('.collection-card');
+
+  if (searchInput) {
+    searchInput.addEventListener('keyup', function() {
+      const searchTerm = this.value.toLowerCase();
+      
+      cards.forEach(card => {
+        const name = card.dataset.name;
+        if (name.includes(searchTerm)) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  }
+});
+</script>
+{{ end }}

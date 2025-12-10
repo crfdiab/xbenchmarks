@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ .Title }} - XBenchmarks</title>
+  <meta name="description" content="{{ .Summary }}">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="nav-container">
+        <h1 class="logo"><a href="/">XBenchmarks</a></h1>
+        <ul class="nav-menu">
+          <li><a href="/">Home</a></li>
+          <li><a href="/laptop-brands/">Laptops</a></li>
+          <li><a href="/cpus/cpu-vendors/">CPUs</a></li>
+          <li><a href="/gpus/gpu-vendors/">GPUs</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    {{ block "main" . }}{{ end }}
+  </main>
+
+  <footer>
+    <p>&copy; 2025 XBenchmarks. All rights reserved.</p>
+  </footer>
+
+  <script src="/js/configurator.js"></script>
+</body>
+</html>

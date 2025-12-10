@@ -1,0 +1,134 @@
+{{ define "main" }}
+<article class="cpu-profile">
+  <div class="component-header">
+    <div class="component-image">
+      {{ if .Params.cpu.image }}
+        <img src="{{ .Params.cpu.image }}" alt="{{ .Params.cpu.name }}">
+      {{ else }}
+        <div class="image-placeholder">CPU</div>
+      {{ end }}
+    </div>
+    <div class="component-info">
+      <h1>{{ .Params.cpu.name }} CPU Specs & Performance Review</h1>
+      {{ if .Params.cpu.benchmarks.general.metrics.vendor }}
+        <p class="vendor">{{ .Params.cpu.benchmarks.general.metrics.vendor }}</p>
+      {{ end }}
+      {{ if .Params.cpu.benchmarks.general.metrics.released }}
+        <p class="released">Released: {{ .Params.cpu.benchmarks.general.metrics.released }}</p>
+      {{ end }}
+
+      {{ if .Params.cpu.single_model_meta_description }}
+        <p class="description">{{ .Params.cpu.single_model_meta_description }}</p>
+      {{ end }}
+    </div>
+  </div>
+
+  <section class="specs-section">
+    <h2>Specifications</h2>
+    <div class="specs-grid">
+      {{ with .Params.cpu.benchmarks.cpu.metrics }}
+      <div class="spec-card">
+        <h3>Core Configuration</h3>
+        <ul>
+          {{ if .p_cores }}<li>P-Cores: {{ .p_cores }}</li>{{ end }}
+          {{ if .p_threads }}<li>P-Threads: {{ .p_threads }}</li>{{ end }}
+          {{ if .total_cores }}<li>Total Cores: {{ .total_cores }}</li>{{ end }}
+          {{ if .total_threads }}<li>Total Threads: {{ .total_threads }}</li>{{ end }}
+        </ul>
+      </div>
+      {{ end }}
+
+      {{ with .Params.cpu.benchmarks.cpu.metrics }}
+      <div class="spec-card">
+        <h3>Clock Speeds</h3>
+        <ul>
+          {{ if .base_frequency_p }}<li>Base Frequency: {{ .base_frequency_p }}</li>{{ end }}
+          {{ if .turbo_boost_frequency_p }}<li>Turbo Boost: {{ .turbo_boost_frequency_p }}</li>{{ end }}
+          {{ if .base_frequency_e }}<li>E-Core Base: {{ .base_frequency_e }}</li>{{ end }}
+          {{ if .turbo_boost_frequency_e }}<li>E-Core Turbo: {{ .turbo_boost_frequency_e }}</li>{{ end }}
+        </ul>
+      </div>
+      {{ end }}
+
+      {{ with .Params.cpu.benchmarks.cpu.metrics }}
+      <div class="spec-card">
+        <h3>Cache</h3>
+        <ul>
+          {{ if .l1_cache }}<li>L1 Cache: {{ .l1_cache }}</li>{{ end }}
+          {{ if .l2_cache }}<li>L2 Cache: {{ .l2_cache }}</li>{{ end }}
+          {{ if .l3_cache }}<li>L3 Cache: {{ .l3_cache }}</li>{{ end }}
+        </ul>
+      </div>
+      {{ end }}
+
+      {{ with .Params.cpu.benchmarks.package.metrics }}
+      <div class="spec-card">
+        <h3>Package</h3>
+        <ul>
+          {{ if .fabrication_process }}<li>Process: {{ .fabrication_process }}</li>{{ end }}
+          {{ if .tdp_pl1 }}<li>TDP: {{ .tdp_pl1 }}</li>{{ end }}
+          {{ if .socket }}<li>Socket: {{ .socket }}</li>{{ end }}
+          {{ if .transistors }}<li>Transistors: {{ .transistors }}</li>{{ end }}
+        </ul>
+      </div>
+      {{ end }}
+    </div>
+  </section>
+
+  <section class="benchmarks-section">
+    <h2>Benchmarks</h2>
+    {{ with .Params.cpu.benchmarks.geekbench_v6.metrics }}
+    <div class="spec-card">
+      <h3>Geekbench v6</h3>
+      <table class="bench-table">
+        <tbody>
+          {{ range $key, $value := . }}
+          <tr>
+            <td class="bench-name">{{ $key | humanize }}</td>
+            <td class="bench-value">{{ $value }}</td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </div>
+    {{ end }}
+
+    {{ with .Params.cpu.benchmarks.passmark.metrics }}
+    <div class="spec-card">
+      <h3>Passmark</h3>
+      <table class="bench-table">
+        <tbody>
+          {{ range $key, $value := . }}
+          <tr>
+            <td class="bench-name">{{ $key | humanize }}</td>
+            <td class="bench-value">{{ $value }}</td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </div>
+    {{ end }}
+  </section>
+
+  <section class="related-section">
+    <h2>Laptops with {{ .Params.cpu.name }}</h2>
+    <div class="related-grid">
+      {{ $cpuId := printf "%v" .Params.cpu.id }}
+      {{ range $id, $laptop := .Params.laptops }}
+        {{ range $laptop.configurations.cpus }}
+          {{ if eq (printf "%v" .id) $cpuId }}
+            <div class="related-card">
+              {{ if $laptop.image }}
+                <img src="{{ $laptop.image }}" alt="{{ $laptop.name }}">
+              {{ else }}
+                <div class="image-placeholder">Laptop</div>
+              {{ end }}
+              <h3><a href="/laptop-brands/{{ index ($laptop.name | split " ") 0 | lower | replaceRE "[^a-z0-9-]+" "" }}/{{ $laptop.slug }}/">{{ $laptop.name }}</a></h3>
+            </div>
+          {{ end }}
+        {{ end }}
+      {{ end }}
+    </div>
+  </section>
+</article>
+{{ end }}

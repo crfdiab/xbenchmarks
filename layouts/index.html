@@ -1,0 +1,45 @@
+{{ define "main" }}
+<div class="home">
+  <section class="hero">
+    <p>XBenchmarks</p>
+    <p>Compare laptops, CPUs, and GPUs with detailed specifications and benchmarks</p>
+  </section>
+
+  <section class="browse-section">
+    <div class="browse-grid">
+      <div class="browse-card">
+        <h2>Laptops</h2>
+        <p>Browse all laptop models with detailed specs and performance comparisons</p>
+        <a href="/laptop-brands/" class="btn">Browse Laptops</a>
+      </div>
+      <div class="browse-card">
+        <h2>CPUs</h2>
+        <p>Explore processor specifications, benchmarks, and performance metrics</p>
+        <a href="/cpus/cpu-vendors/" class="btn">Browse CPUs</a>
+      </div>
+      <div class="browse-card">
+        <h2>GPUs</h2>
+        <p>Compare graphics cards with gaming performance and specifications</p>
+        <a href="/gpus/gpu-vendors/" class="btn">Browse GPUs</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats-section">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>{{ len .Site.Data.laptops }}</h3>
+        <p>Laptops</p>
+      </div>
+      <div class="stat-card">
+        <h3>{{ len .Site.Data.cpus }}</h3>
+        <p>CPUs</p>
+      </div>
+      <div class="stat-card">
+        <h3>{{ len .Site.Data.gpus }}</h3>
+        <p>GPUs</p>
+      </div>
+    </div>
+  </section>
+</div>
+{{ end }}

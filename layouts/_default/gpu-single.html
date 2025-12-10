@@ -1,0 +1,104 @@
+{{ define "main" }}
+<article class="gpu-profile">
+  <div class="component-header">
+    <div class="component-image">
+      {{ if .Params.gpu.image }}
+        <img src="{{ .Params.gpu.image }}" alt="{{ .Params.gpu.name }}">
+      {{ else }}
+        <div class="image-placeholder">GPU</div>
+      {{ end }}
+    </div>
+    <div class="component-info">
+      <h1>{{ .Params.gpu.name }} CPU Specs & Performance Review</h1>
+      {{ if .Params.gpu.specs.general.vendor }}
+        <p class="vendor">{{ .Params.gpu.specs.general.vendor }}</p>
+      {{ end }}
+
+      {{ if .Params.gpu.single_model_meta_description }}
+        <p class="description">{{ .Params.gpu.single_model_meta_description }}</p>
+      {{ end }}
+    </div>
+  </div>
+
+  <section class="specs-section">
+    <h2>Specifications</h2>
+    <div class="specs-grid">
+      {{ with .Params.gpu.specs.physical }}
+      <div class="spec-card">
+        <h3>Physical</h3>
+        <ul>
+          {{ if .tgp }}<li>TGP: {{ .tgp }}</li>{{ end }}
+          {{ if .fabrication_process }}<li>Process: {{ .fabrication_process }}</li>{{ end }}
+          {{ if .die_size }}<li>Die Size: {{ .die_size }}</li>{{ end }}
+        </ul>
+      </div>
+      {{ end }}
+
+      {{ with .Params.gpu.specs.graphics_processing_unit }}
+      <div class="spec-card">
+        <h3>GPU Core</h3>
+        <ul>
+          {{ if .base_clock }}<li>Base Clock: {{ .base_clock }}</li>{{ end }}
+          {{ if .boost_clock }}<li>Boost Clock: {{ .boost_clock }}</li>{{ end }}
+          {{ if .shading_units }}<li>Shading Units: {{ .shading_units }}</li>{{ end }}
+          {{ if .texture_mapping_units_tmus }}<li>TMUs: {{ .texture_mapping_units_tmus }}</li>{{ end }}
+          {{ if .render_output_units_rops }}<li>ROPs: {{ .render_output_units_rops }}</li>{{ end }}
+        </ul>
+      </div>
+      {{ end }}
+
+      {{ with .Params.gpu.specs.memory }}
+      <div class="spec-card">
+        <h3>Memory</h3>
+        <ul>
+          {{ if .memory_size }}<li>Size: {{ .memory_size }}</li>{{ end }}
+          {{ if .memory_type }}<li>Type: {{ .memory_type }}</li>{{ end }}
+          {{ if .memory_clock }}<li>Clock: {{ .memory_clock }}</li>{{ end }}
+          {{ if .memory_bus }}<li>Bus: {{ .memory_bus }}</li>{{ end }}
+        </ul>
+      </div>
+      {{ end }}
+    </div>
+  </section>
+
+  <section class="benchmarks-section">
+    <h2>Gaming Performance</h2>
+    {{ with .Params.gpu.gaming_fps }}
+    <div class="spec-card">
+      <h3>Average FPS</h3>
+      <table class="bench-table">
+        <tbody>
+          {{ range $resolution, $settings := .average_fps_of_all_games }}
+          <tr>
+            <td class="bench-name">{{ $resolution | humanize }}</td>
+            <td class="bench-value">{{ $settings }} FPS</td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </div>
+    {{ end }}
+  </section>
+
+  <section class="related-section">
+    <h2>Laptops with {{ .Params.gpu.name }}</h2>
+    <div class="related-grid">
+      {{ $gpuId := printf "%v" .Params.gpu.id }}
+      {{ range $id, $laptop := .Params.laptops }}
+        {{ range $laptop.configurations.gpus }}
+          {{ if eq (printf "%v" .id) $gpuId }}
+            <div class="related-card">
+              {{ if $laptop.image }}
+                <img src="{{ $laptop.image }}" alt="{{ $laptop.name }}">
+              {{ else }}
+                <div class="image-placeholder">Laptop</div>
+              {{ end }}
+              <h3><a href="/laptop-brands/{{ index ($laptop.name | split " ") 0 | lower | replaceRE "[^a-z0-9-]+" "" }}/{{ $laptop.slug }}/">{{ $laptop.name }}</a></h3>
+            </div>
+          {{ end }}
+        {{ end }}
+      {{ end }}
+    </div>
+  </section>
+</article>
+{{ end }}
