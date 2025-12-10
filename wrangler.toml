@@ -1,5 +1,0 @@
-name = "xbenchmarks"
-compatibility_date = "2025-12-10"
-
-[env.production]
-name = "xbenchmarks-production"
