@@ -1,6 +1,5 @@
 {
-  "version": 1,
-  "buildCommand": "hugo",
-  "buildCommandDir": "/",
-  "outputDirectory": "public"
+  "name": "xbenchmarks",
+  "type": "javascript",
+  "main": "src/index.ts"
 }

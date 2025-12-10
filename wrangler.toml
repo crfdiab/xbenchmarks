@@ -1,12 +1,5 @@
 name = "xbenchmarks"
-type = "javascript"
-account_id = ""
-workers_dev = true
-route = ""
-zone_id = ""
+compatibility_date = "2025-12-10"
 
 [env.production]
 name = "xbenchmarks-production"
-routes = [
-  { pattern = "xbenchmarks.pages.dev", zone_name = "xbenchmarks.pages.dev" }
-]

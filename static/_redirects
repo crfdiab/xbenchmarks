@@ -1,0 +1,4 @@
+# Cloudflare Pages Redirects
+# This file handles routing for the static site
+
+# Catch-all for SPA-style routing (if needed in future)
